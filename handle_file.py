@@ -1,12 +1,5 @@
-#read wordsEn.txt and make the dictionary with key is 2 last letter of word in wordsEnd.txt
-# and value is array word with 2 first letter = 2 last letter of key
-
-import nltk
 import json
 from collections import defaultdict
-
-# Download and install necessary resources from nltk
-nltk.download('punkt')
 
 # Load the text file containing the words
 with open('wordsEn.txt', 'r') as f:
