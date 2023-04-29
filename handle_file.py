@@ -12,7 +12,7 @@ nltk.download('punkt')
 with open('wordsEn.txt', 'r') as f:
     words = f.read().split()
 
-words = [string for string in words if len(string) > 2]
+words = [string for string in words if len(string) > 10]
 
 # Create a word_dict_2last_letter to store the dictionary with key is 2last letter
 word_dict_2last_letter = defaultdict(list)
@@ -47,8 +47,8 @@ with open('word_dict_2first_letter.json', 'w') as f:
 with open('word_dict_2first_2last_letter.json', 'w') as f:
     json.dump(word_dict_2first_2last_letter, f)
 
-print(word_dict_2first_letter["en"])
-print(word_dict_2last_letter["pa"])
+# print(word_dict_2first_letter["en"])
+# print(word_dict_2last_letter["pa"])
 
 print(len(word_dict_2last_letter))
 print(len(word_dict_2first_letter))
