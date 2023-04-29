@@ -1,15 +1,20 @@
 import json
 
 # # Prompt the user to enter two words
-# word1 = input("Enter the first word: ")
-# word2 = input("Enter the second word: ")
-#
-# # Check if the last two letters of word1 match the first two letters of word2
-# if word1[-2:] == word2[:2]:
-#     print("True")
-# else:
-#     print("False")
+word1 = input("Enter the first word: ")
+if len(word1) < 3:
+    print("Please input more than 2 letter")
+    exit()
 
+word2 = input("Enter the second word: ")
+if len(word2) < 3:
+    print("Please input more than 2 letter")
+    exit()
+
+# # Check if the last two letters of word1 match the first two letters of word2
+if word1[-2:] == word2[:2]:
+    print("Special case. Chain is: ", word1, word2)
+    exit()
 
 # Loading the dictionary from the json file
 with open("word_dict_2first_2last_letter.json", "r") as f:
@@ -26,7 +31,7 @@ with open("word_dict_2first_letter.json", "r") as f:
 with open("word_dict_2last_letter.json", "r") as f:
     word_dict_2last_letter = json.load(f)
 
-begin = "al"
+begin = word1[-2:]
 if begin in word_dict_2first_letter:
     listWordBegins = word_dict_2first_letter[begin]
     print(listWordBegins)
@@ -34,7 +39,7 @@ else:
     print("Dont have chain because begin not exit")
     exit()
 
-end = "bl"
+end = word2[:2]
 if end in word_dict_2last_letter:
     listWordEnd = word_dict_2last_letter[end]
     print(listWordEnd)
@@ -42,87 +47,58 @@ else:
     print("Dont have chain because end not exit")
     exit()
 
-smallestChain = []
-arr2 = []
+
+# Hàm tìm đường đi ngắn nhất từ start đến end sử dụng BFS
+def bfs_shortest_path(graph, start, end):
+    # Khởi tạo hàng đợi và đánh dấu các điểm đã thăm
+    queue = [[start]]
+    visited = set()
+
+    # Nếu điểm bắt đầu và kết thúc trùng nhau
+    if start == end:
+        return [start]
+
+    while queue:
+        # Lấy đường đi đầu tiên từ hàng đợi
+        path = queue.pop(0)
+        # Lấy điểm cuối cùng của đường đi đó
+        node = path[-1]
+
+        # Nếu điểm đó chưa được thăm
+        if node not in visited:
+            # Lấy tất cả các điểm kề của điểm đó
+            if node in graph:
+                neighbours = graph[node]
+                # Lặp qua tất cả các điểm kề đó
+                for neighbour in neighbours:
+                    # Tạo một đường đi mới bằng cách thêm điểm kề vào cuối đường đi cũ
+                    new_path = list(path)
+                    new_path.append(neighbour)
+                    # Nếu điểm kề đó là điểm kết thúc, trả về đường đi mới
+                    if neighbour == end:
+                        return new_path
+                    # Thêm đường đi mới vào hàng đợi
+                    queue.append(new_path)
+
+            # Đánh dấu điểm đó là đã thăm
+            visited.add(node)
+
+    # Nếu không tìm thấy đường đi từ start đến end, trả về None
+    return None
 
 
-def find_word(begin_letter, end_letter, my_dict=None, arr=None):
-    if my_dict is None:
-        my_dict = {}
-    global smallestChain
-    global arr2
-    if arr is None:
-        arr = []
+# Tìm đường đi ngắn nhất từ A đến G
+shortest_path = bfs_shortest_path(word_dict_2first_2last_letter, begin, end)
 
-    arr.append(begin_letter)
+# In ra đường đi tìm được
+print("The shortest chain with 2 letter - from begin ", word1, " to ", word2, "is ", shortest_path)
 
-    print("find_word ", begin, " end = ", end_letter, " arr = ", arr, "arr2 = ", arr2)
-
-    if begin_letter not in my_dict:
-        print("dont have key begin ", begin_letter)
-        arr2.append(arr)
-        if len(arr2) >= 2:
-            return arr2
-    else:
-        # danh sách các từ bắt đầu với begin
-        list_word_begin = word_dict_2first_2last_letter[begin]
-        if end_letter in list_word_begin:
-            # khớp rồi
-            arr.append(end_letter)
-            arr2.append(arr)
-            if len(smallestChain) == 0 or len(smallestChain) < len(arr):
-                smallestChain = arr.copy()
-                return
-
-            if len(arr2) > 1:
-                return
-            return arr2
-        else:
-            new_dict = dict(my_dict)
-            del new_dict[begin_letter]
-            if len(arr) < 2:
-                for new_begin in list_word_begin:
-                    if new_begin not in arr:
-                        new_arr = arr.copy()
-                        find_word(new_begin, end_letter, new_dict, new_arr)
-
-    # print("find_word with begin is", begin_letter, " end is ", end_letter, " arr is ", arr)
-    # arr.append(begin_letter)
-    # if begin_letter in word_dict_2first_2last_letter:
-    #     list_ends = word_dict_2first_2last_letter[begin_letter]
-    #     #print("begin_letter is ", begin_letter, " list end is ", list_ends)
-    #     if end_letter in list_ends:
-    #         print("find success - ", end_letter, " with list end ", list_ends)
-    #         arr.append(end_letter)
-    #         arr2.append(arr)
-    #         if len(list_old_ends) > 0:
-    #             new_begin = list_old_ends[0]
-    #             return find_word(new_begin, end_letter, list_old_ends[1:], arr, arr2)
-    #         else:
-    #             return arr2
-    #     else:
-    #         for new_end in list_ends:
-    #             if new_end not in arr:
-    #                 list_old_ends_new = word_dict_2first_2last_letter[new_end]
-    #                 return find_word(new_end, end_letter, list_old_ends_new, arr, arr2)
-    # else:
-    #     print("dont have the key in dic ", begin_letter)
-    #     if len(list_old_ends) > 0:
-    #         new_begin = list_old_ends[0]
-    #         return find_word(new_begin, end_letter, list_old_ends[1:], arr, arr2)
-    #     else:
-    #         return arr2
-
-
-find_word(begin, end, word_dict_2first_2last_letter)
-
-# for list_begin in arr2:
-#     for i in range(len(list_begin) - 1):
-#         arr_word_begin = word_dict_2first_letter[list_begin[i]]
-#         for word in arr_word_begin:
-#             if word[-2:] == list_begin[i + 1]:
-#                 print(word)
-#                 break
-
-print("arr2 = ", arr2)
-print("smallestChain = ", smallestChain)
+print("The shortest chain is")
+print(word1)
+for i in range(len(shortest_path) - 1):
+    arr_word_begin = word_dict_2first_letter[shortest_path[i]]
+    for word in arr_word_begin:
+        if word[-2:] == shortest_path[i + 1]:
+            print(word)
+            break
+print(word2)
