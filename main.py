@@ -1,3 +1,4 @@
+import json
 
 # # Prompt the user to enter two words
 # word1 = input("Enter the first word: ")
@@ -9,31 +10,42 @@
 # else:
 #     print("False")
 
-# Open the text file in read mode
-with open('wordsEn.txt', 'r') as file:
-    # Read the content of the file
-    content = file.read()
 
-# Split the content into an array of strings
-array_of_strings = content.split('\n')
-print("Len list string", len(array_of_strings))
+# Loading the dictionary from the json file
+with open("word_dict_2first_2last_letter.json", "r") as f:
+    word_dict_2first_2last_letter = json.load(f)
 
-array_of_strings = [string for string in array_of_strings if len(string) > 2]
-print("Len list string after remove stiring less than 3", len(array_of_strings))
+print(len(word_dict_2first_2last_letter))
 
-words_dict = {word: [next_word for next_word in array_of_strings if word[-2:] == next_word[:2]]
-              for word in array_of_strings}
-
-# In ra 5 phần tử đầu tiên của dictionary
-for key, value in list(words_dict.items())[:5]:
+# Print 5 first item of dictionary
+for key, value in list(word_dict_2first_2last_letter.items())[:5]:
     print(key, ":", value)
-# dic_words = {}
-# for key in array_of_strings:
-#     for value in array_of_strings:
-#         if key != value and key[-2:] == value[:2]:
-#             if key in dic_words:
-#                 dic_words[key].append(value)
-#             else:
-#                 dic_words[key] = [value]
-#
-# print(len(dic_words))
+
+begin = "en"
+end = "pa"
+
+
+def find_word(begin_letter, end_letter, arr=None):
+    if arr is None:
+        arr = []
+    print("find_word with begin is", begin_letter, " end is ", end_letter, " arr is ", arr)
+    arr.append(begin_letter)
+    if begin_letter in word_dict_2first_2last_letter:
+        list_ends = word_dict_2first_2last_letter[begin_letter]
+        #print("begin_letter is ", begin_letter, " list end is ", list_ends)
+        if end_letter in list_ends:
+            print("find success - ", end_letter, " with list end ", list_ends)
+            arr.append(end_letter)
+            return arr
+        else:
+            for new_end in list_ends:
+                if new_end not in arr:
+                    return find_word(new_end, end_letter, arr)
+    else:
+        print("dont have the key in dic ", begin_letter)
+        #return arr
+
+
+list_key_value = find_word(begin, end)
+
+print(list_key_value)
