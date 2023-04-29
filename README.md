@@ -22,4 +22,5 @@ Ví dụ: User input vào word1 = pen, word2 = paper. Nhiệm vụ của chúng 
   - Tạo dictionary với key là 2 kí tự đầu của từ và value là danh sách 2 kí tự cuối của tất cả các từ có 2 kí tự đầu là key. Ví dụ:
     - Có các từ pen, english, end, follow, ... thì với key = en thì value = ['sh', 'nd']
   - Sau khi xử lý xong thì số key chỉ còn khoảng 351. Rất ít so với 109k input đầu vào. 
-- Tìm đường đi ngắn nhất. Sau khi thử dùng đệ quy mà ko work, tìm cách handle với Dijkstra nhưng sẽ gặp vấn đề nếu như số lượng node quá lớn. Sau một hồi nhờ chatgpt support thì tìm ra solution BFS (Breadth-First Search) để xử lý vì khoảng cách giữa các điểm có liên quan đền = 1/
+- Tìm đường đi ngắn nhất. Sau khi thử dùng đệ quy mà ko work, tìm cách handle với Dijkstra nhưng sẽ gặp vấn đề nếu như số lượng node quá lớn. 
+Sau một hồi nhờ chatgpt support thì tìm ra solution BFS (Breadth-First Search) để xử lý vì khoảng cách giữa các điểm có liên quan đền = 1.
