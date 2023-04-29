@@ -48,7 +48,7 @@ else:
     exit()
 
 
-# Hàm tìm đường đi ngắn nhất từ start đến end sử dụng BFS
+# Hàm tìm đường đi ngắn nhất từ start đến end sử dụng BFS - CopyRight from Chat GPT :D 
 def bfs_shortest_path(graph, start, end):
     # Khởi tạo hàng đợi và đánh dấu các điểm đã thăm
     queue = [[start]]
@@ -87,7 +87,6 @@ def bfs_shortest_path(graph, start, end):
     return None
 
 
-# Tìm đường đi ngắn nhất từ A đến G
 shortest_path = bfs_shortest_path(word_dict_2first_2last_letter, begin, end)
 
 # In ra đường đi tìm được
