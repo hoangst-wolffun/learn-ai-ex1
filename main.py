@@ -42,13 +42,17 @@ else:
     print("Dont have chain because end not exit")
     exit()
 
+arrWordHandled = []
+
 
 def find_word(begin_letter, end_letter, my_dict={}, arr=None, arr2=None):
+    global arrWordHandled
     if arr is None:
         arr = []
     if arr2 is None:
         arr2 = []
     arr.append(begin_letter)
+    arrWordHandled.append(begin_letter)
     print("find_word ", begin, " end = ", end_letter, " arr = ", arr, "arr2 = ", arr2)
     if len(arr2) > 0:
         return arr2
@@ -68,8 +72,9 @@ def find_word(begin_letter, end_letter, my_dict={}, arr=None, arr2=None):
             new_dict = dict(my_dict)
             del new_dict[begin_letter]
             for new_begin in list_word_begin:
-                new_arr = arr.copy()
-                find_word(new_begin, end_letter, new_dict, new_arr, arr2)
+                if new_begin not in arrWordHandled:
+                    new_arr = arr.copy()
+                    find_word(new_begin, end_letter, new_dict, new_arr, arr2)
 
     # print("find_word with begin is", begin_letter, " end is ", end_letter, " arr is ", arr)
     # arr.append(begin_letter)
